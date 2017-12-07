@@ -11,6 +11,10 @@
 |
 */
 
-Route::get('/', 'IndexController@index');
+Route::get('/', 'IndexController@index')->name('index');
+
+Route::get('/result', 'IndexController@result')->name('result');
 
 Route::post('/save', 'IndexController@save')->name('save');
+
+

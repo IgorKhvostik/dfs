@@ -14,15 +14,15 @@
                 <form action="{{route('save')}}" class="form-group" method="post">
                     <div class="form-group">
                         <label for="search-eng">Search engine:</label>
-                        <select class="form-control" id="search-eng" name="search-eng">
-                            @foreach($locations as $location)
-                                <option value="{{$location['loc_id']}}">{{$location['loc_name']}}</option>
+                        <select class="form-control" id="search-eng" name="searchEng">
+                            @foreach($searchEngines as $id=>$name)
+                                <option value="{{$name}}">{{$name}}</option>
                             @endforeach
                         </select>
                         <label for="location">Location:</label>
                         <select class="form-control" id="location" name="location">
-                            @foreach($searchEngines as $id=>$name)
-                                <option value="{{$id}}">{{$name}}</option>
+                            @foreach($locations as $location)
+                                <option value="{{$location['loc_id']}}" >{{$location['loc_name']}}</option>
                             @endforeach
                         </select>
                         <label for="website">Website:</label>
@@ -45,6 +45,7 @@
                     </div>
                     {{csrf_field()}}
                 </form>
+                <a class=" btn btn-default" href="{{route('result')}}">To result page</a>
             </div>
         </div>
     </main>

@@ -15,10 +15,11 @@ class CreateTableQueries extends Migration
     {
         Schema::create('queries', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('search-eng');
+            $table->string('searchEng');
             $table->integer('location');
             $table->string('website');
             $table->string('keywords');
+            $table->integer('position')->nullable()->default(null);
             $table->timestamps();
         });
     }
@@ -30,6 +31,6 @@ class CreateTableQueries extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('queries');
     }
 }
