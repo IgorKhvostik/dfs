@@ -19,6 +19,7 @@ class CreateTableQueries extends Migration
             $table->integer('location');
             $table->string('website');
             $table->string('keywords');
+            $table->integer('taskId')->nullable()->default(null);
             $table->integer('position')->nullable()->default(null);
             $table->timestamps();
         });

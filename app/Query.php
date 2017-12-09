@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Query extends Model
 {
-    protected $fillable=['id', 'searchEng', 'location', 'website', 'keywords'];
+    protected $fillable=['id', 'searchEng', 'taskId', 'location', 'website', 'keywords'];
 }
