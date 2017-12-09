@@ -12,13 +12,14 @@ class IndexController extends Controller
 {
     public function index()
     {
-
         require('RestClient.php');
         try {
             //Instead of 'login' and 'password' use your credentials from https://my.dataforseo.com/login
             $client = new RestClient('https://api.dataforseo.com/', null, 'challenger17@rankactive.info', 'LEVgtxFTGmlmSLT9');
 
-            $se_get_result = $client->get('v2/cmn_se/GB');
+            $se_get_result = $client->get('v2/cmn_se/NL');
+
+            //delete unnecessary elements from sub-arrays
             foreach ($se_get_result['results'] as $k => $smallArr) {
                 foreach ($smallArr as $key => $item) {
                     if ($key == 'se_id' || $key == 'se_name') {
@@ -27,6 +28,7 @@ class IndexController extends Controller
                 }
             }
 
+            //Making search engines look like: 'id'=>'name'
             $searchEngines = array();
             foreach ($arr as $item) {
                 if (!in_array($item['se_name'], $searchEngines)) {
@@ -34,11 +36,17 @@ class IndexController extends Controller
                 }
             }
 
-
             $client = new RestClient('https://api.dataforseo.com/', null, 'challenger17@rankactive.info', 'LEVgtxFTGmlmSLT9');
+            $se_get_result = $client->get('v2/cmn_locations/NL');
 
-            $se_get_result = $client->get('v2/cmn_locations/GB');
-            $se_get_result = array_slice($se_get_result['results'], 0, 20);
+            //Alternate variant to sort the list of locations
+            /*for ($i = 0; $i < count($se_get_result['results']); $i++) {
+                if ($se_get_result['results'][$i]['loc_type'] == 'Municipality') {
+                    $municipalities[$se_get_result['results'][$i]['loc_id']] = $se_get_result['results'][$i]['loc_name'];
+                }
+            }*/
+
+            $se_get_result = array_slice($se_get_result['results'], 0, 50);
             $locations = array();
             foreach ($se_get_result as $k => $val)
                 foreach ($val as $key => $item) {
@@ -59,7 +67,7 @@ class IndexController extends Controller
         $client = null;
 
         return view('index')->with([
-            'locations' => $locations,
+            'locations' => $se_get_result,
             'searchEngines' => $searchEngines
         ]);
 
@@ -72,7 +80,6 @@ class IndexController extends Controller
             'keywords' => 'string'
         ]);
 
-        //dd($request->website);
         require('RestClient.php');
 
         try {
@@ -123,11 +130,9 @@ class IndexController extends Controller
     public function result()
     {
         $data = Query::all();
-        //dd($data);
         return view('result')->with([
             'data' => $data
         ]);
-
     }
 
     public function check(Request $request)
@@ -145,7 +150,7 @@ class IndexController extends Controller
         }
         try {
             $task_get_result = $client->get('v2/rnk_tasks_get/' . $request->taskId);
-            //dd($task_get_result);
+
             if ($task_get_result['results_count'] == 0) {
                 return "Task is still in progress, be patient :)";
             } elseif ($task_get_result['results']['organic'][0]['result_position'] == null) {
@@ -157,7 +162,6 @@ class IndexController extends Controller
             }
 
             return $row->position;
-
 
         } catch (RestClientException $e) {
             echo "\n";

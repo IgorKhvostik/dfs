@@ -4,7 +4,7 @@
     <header id="header">
         <div class="header-wrap">
             <h1 class="header-text">Get the position of your website!</h1>
-            <h3 class="header-text">Example with Great Britain</h3>
+            <h3 class="header-text">Example with Netherlands</h3>
         </div>
     </header>
 
@@ -22,7 +22,7 @@
                         <label for="location">Location:</label>
                         <select class="form-control" id="location" name="location">
                             @foreach($locations as $location)
-                                <option value="{{$location['loc_id']}}" >{{$location['loc_name']}}</option>
+                                <option value="{{$location['loc_id']}}">{{$location['loc_name']}}</option>
                             @endforeach
                         </select>
                         <label for="website">Website:</label>

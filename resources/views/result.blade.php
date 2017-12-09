@@ -29,7 +29,7 @@
                             <td>
                                 @if(is_null($item->position))
                                     <div id="{{$item->taskId}}" class="hid">
-                                        <button class=" btn btn-primary result" href="#">{{$item->taskId}}</button>
+                                        <button class=" btn btn-default  btn-sm result" href="#">Get position</button>
                                     </div>
                                 @else{{$item->position}}
                                 @endif
@@ -44,12 +44,13 @@
                     @endforeach
                     </tbody>
                 </table>
-
                 <a class=" btn btn-default" href="{{route('index')}}">Get back</a>
             </div>
         </div>
     </main>
+
     <script>
+
         $(".result").click(function () {
             var taskId = $(this).parent(".hid").attr('id');
             $.post({
@@ -64,5 +65,7 @@
                 }
             })
         });
+
     </script>
+
 @endsection
