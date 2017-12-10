@@ -7,10 +7,6 @@ html, body {
     margin: 0;
 }
 
-.full-height {
-    height: 100vh;
-}
-
 .flex-center {
     align-items: center;
     display: flex;
@@ -34,13 +30,18 @@ html, body {
 .title {
     font-size: 84px;
 }
+
+.pagination-box {
+    display: flex;
+    justify-content: center;
+}
 .pagination>.active>span{
     background-color: #101820;
-    border-color: #fcc118;
+    border-color: transparent;
 }
 .pagination>.active>span:hover{
     background-color: #101820;
-    border-color: #fcc118;
+    border-color: transparent;
 }
 .pagination>li>a{
     color: #101820;
@@ -99,4 +100,16 @@ html, body {
 }
 .table-bordered>thead>tr>th{
     border: 1px solid black;
+}
+.main-container{
+    position: relative;
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 0;
+}
+.result-page{
+    position: absolute;
+    top: 105%;
+    right: 0;
+    margin-bottom: 10px;
 }

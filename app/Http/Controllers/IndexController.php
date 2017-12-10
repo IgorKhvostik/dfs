@@ -15,7 +15,7 @@ class IndexController extends Controller
         require('RestClient.php');
         try {
             //Instead of 'login' and 'password' use your credentials from https://my.dataforseo.com/login
-            $client = new RestClient('https://api.dataforseo.com/', null, 'challenger17@rankactive.info', 'LEVgtxFTGmlmSLT9');
+            $client = new RestClient('https://api.dataforseo.com/', null, env('API_LOGIN'), env('API_PASSWORD'));
 
             $se_get_result = $client->get('v2/cmn_se/NL');
 
@@ -36,7 +36,7 @@ class IndexController extends Controller
                 }
             }
 
-            $client = new RestClient('https://api.dataforseo.com/', null, 'challenger17@rankactive.info', 'LEVgtxFTGmlmSLT9');
+            $client = new RestClient('https://api.dataforseo.com/', null, env('API_LOGIN'), env('API_PASSWORD'));
             $se_get_result = $client->get('v2/cmn_locations/NL');
 
             //Alternate variant to sort the list of locations
@@ -84,7 +84,7 @@ class IndexController extends Controller
 
         try {
             //Instead of 'login' and 'password' use your credentials from https://my.dataforseo.com/login
-            $client = new RestClient('https://api.dataforseo.com/', null, 'challenger17@rankactive.info', 'LEVgtxFTGmlmSLT9');
+            $client = new RestClient('https://api.dataforseo.com/', null, env('API_LOGIN'), env('API_PASSWORD'));
         } catch (RestClientException $e) {
             echo "\n";
             print "HTTP code: {$e->getHttpCode()}\n";
@@ -109,7 +109,7 @@ class IndexController extends Controller
 
         try {
             // POST /v2/rnk_tasks_post/$data
-            // $tasks_data must by array with key 'data'
+            // $tasks_data must be array with key 'data'
             $task_post_result = $client->post('v2/rnk_tasks_post', array('data' => $post_array));
             $query = new Query($request->all());
             $query->taskId = $task_post_result['results'][$my_unq_id]['task_id'];
@@ -129,7 +129,7 @@ class IndexController extends Controller
 
     public function result()
     {
-        $data = Query::all();
+        $data = Query::paginate(10);
         return view('result')->with([
             'data' => $data
         ]);
@@ -139,7 +139,7 @@ class IndexController extends Controller
     {
         require('RestClient.php');
         try {
-            $client = new RestClient('https://api.dataforseo.com', null, 'challenger17@rankactive.info', 'LEVgtxFTGmlmSLT9');
+            $client = new RestClient('https://api.dataforseo.com', null, env('API_LOGIN'), env('API_PASSWORD'));
         } catch (RestClientException $e) {
             echo "\n";
             print "HTTP code: {$e->getHttpCode()}\n";
@@ -150,7 +150,6 @@ class IndexController extends Controller
         }
         try {
             $task_get_result = $client->get('v2/rnk_tasks_get/' . $request->taskId);
-
             if ($task_get_result['results_count'] == 0) {
                 return "Task is still in progress, be patient :)";
             } elseif ($task_get_result['results']['organic'][0]['result_position'] == null) {
@@ -173,6 +172,44 @@ class IndexController extends Controller
         }
 
         $client = null;
+    }
+    public function checkAll()
+    {
+        require('RestClient.php');
+        try {
+            $client = new RestClient('https://api.dataforseo.com', null, env('API_LOGIN'), env('API_PASSWORD'));
+        } catch (RestClientException $e) {
+            echo "\n";
+            print "HTTP code: {$e->getHttpCode()}\n";
+            print "Error code: {$e->getCode()}\n";
+            print "Message: {$e->getMessage()}\n";
+            print  $e->getTraceAsString();
+            echo "\n";
+        }
+        try {
+            $task_get_result = $client->get('v2/rnk_tasks_get');
+            //dd($task_get_result);
+            if ($task_get_result['results_count'] !== 0){
+                foreach ($task_get_result['results']['organic'] as $item){
+                    $row = Query::where('taskId', $item['task_id'])->first();
+                    if($row){
+                        $row->position = $item['result_position'];
+                        $row->save();
+                    }
+                }
+            }
+
+        } catch (RestClientException $e) {
+            echo "\n";
+            print "HTTP code: {$e->getHttpCode()}\n";
+            print "Error code: {$e->getCode()}\n";
+            print "Message: {$e->getMessage()}\n";
+            print  $e->getTraceAsString();
+            echo "\n";
+        }
+
+        $client = null;
+        return redirect()->route('result');
     }
 
 }

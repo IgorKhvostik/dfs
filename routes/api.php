@@ -17,4 +17,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/check', 'IndexController@check')->name('checkResult');
+Route::post('/check', 'IndexController@check')->name('check');

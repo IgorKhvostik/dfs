@@ -10,43 +10,53 @@
     <main>
         <div class="container">
             <div class="row">
-                <table class="table table-bordered main-table">
-                    <thead>
-                    <tr>
-                        <th>Search engine</th>
-                        <th>Keyword</th>
-                        <th>Website</th>
-                        <th>Position</th>
-                        <th>Status</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($data as $item)
+                <div class="main-container">
+                    <table class="table table-bordered main-table">
+                        <thead>
                         <tr>
-                            <td>{{$item->searchEng}}</td>
-                            <td>{{$item->keywords}}</td>
-                            <td>{{$item->website}}</td>
-                            <td>
-                                @if(is_null($item->position))
-                                    <div id="{{$item->taskId}}" class="hid">
-                                        <button class=" btn btn-default  btn-sm result" href="#">Get position</button>
-                                    </div>
-                                @else{{$item->position}}
-                                @endif
-                            </td>
-                            <td>
-                                @if(is_null($item->position))
-                                    Processing
-                                @else Tracked
-                                @endif
-                            </td>
+                            <th>Search engine</th>
+                            <th>Keyword</th>
+                            <th>Website</th>
+                            <th>Position</th>
+                            <th>Status</th>
                         </tr>
-                    @endforeach
-                    </tbody>
-                </table>
-                <a class=" btn btn-default" href="{{route('index')}}">Get back</a>
+                        </thead>
+                        <tbody>
+                        @foreach($data as $item)
+                            <tr>
+                                <td>{{$item->searchEng}}</td>
+                                <td>{{$item->keywords}}</td>
+                                <td>{{$item->website}}</td>
+                                <td>
+                                    @if(is_null($item->position))
+                                        <div id="{{$item->taskId}}" class="hid">
+                                            <button class=" btn btn-default  btn-sm result" href="">Get position
+                                            </button>
+                                        </div>
+                                    @else{{$item->position}}
+                                    @endif
+                                </td>
+                                <td>
+                                    @if(is_null($item->position))
+                                        Processing
+                                    @else Tracked
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                    <div class="button-box">
+                        <a class=" btn btn-default" href="{{route('index')}}">Get back</a>
+                        <a class=" btn btn-default" href="{{route('checkAll')}}">Get all completed tasks</a>
+                    </div>
+                    <div class="pagination-box">
+                        {{ $data->links() }}
+                    </div>
+                </div>
             </div>
         </div>
+
     </main>
 
     <script>
@@ -54,7 +64,7 @@
         $(".result").click(function () {
             var taskId = $(this).parent(".hid").attr('id');
             $.post({
-                url: "{{route('checkResult')}}",
+                url: "{{route('check')}}",
                 data: {taskId: taskId},
                 dataType: 'html',
                 success: function (result) {

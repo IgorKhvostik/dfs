@@ -13,5 +13,6 @@
 
 Route::get('/', 'IndexController@index')->name('index');
 Route::get('/result', 'IndexController@result')->name('result');
+Route::get('/checkAll', 'IndexController@checkAll')->name('checkAll');
 
 Route::post('/save', 'IndexController@save')->name('save');

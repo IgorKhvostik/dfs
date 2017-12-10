@@ -11,8 +11,8 @@
     <main>
         <div class="container">
             <div class="row">
-                <form action="{{route('save')}}" class="form-group" method="post">
-                    <div class="form-group">
+                <div class="main-container">
+                    <form action="{{route('save')}}" class="form-group main-form" method="post">
                         <label for="search-eng">Search engine:</label>
                         <select class="form-control" id="search-eng" name="searchEng">
                             @foreach($searchEngines as $id=>$name)
@@ -26,7 +26,8 @@
                             @endforeach
                         </select>
                         <label for="website">Website:</label>
-                        <input type="text" class="form-control" id="website" name="website" value="{{old('website')}}">
+                        <input type="text" class="form-control" id="website" name="website" value="{{old('website')}}"
+                               placeholder="Domain name going after 'http://www' (example: vk.com, github.com)">
                         @if ($errors->has('website'))
                             <span class="help-block">
                             <strong>{{ $errors->first('website') }}</strong>
@@ -42,10 +43,10 @@
                         @endif
                         <br>
                         <button type="submit" class="btn btn-primary btn-block">Submit</button>
-                    </div>
-                    {{csrf_field()}}
-                </form>
-                <a class=" btn btn-default" href="{{route('result')}}">To result page</a>
+                        {{csrf_field()}}
+                    </form>
+                    <a class=" btn btn-default result-page" href="{{route('result')}}">To result page</a>
+                </div>
             </div>
         </div>
     </main>
